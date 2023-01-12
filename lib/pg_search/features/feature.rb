@@ -31,7 +31,11 @@ module PgSearch
       def columns
         if options[:only]
           all_columns.select do |column|
-            Array.wrap(options[:only]).map(&:to_s).include? column.name
+            # rubocop:disable Performance/RedundantEqualityComparisonBlock
+            Array.wrap(options[:only]).map(&:to_s).any? do |col|
+              col == (col.match?(/\w+\./) ? "#{column.table}.#{column.name}" : column.name)
+            end
+            # rubocop:enable Performance/RedundantEqualityComparisonBlock
           end
         else
           all_columns

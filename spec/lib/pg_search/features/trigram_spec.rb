@@ -100,6 +100,15 @@ describe PgSearch::Features::Trigram do
           expect(feature.conditions.to_sql).to eq("('#{query}' % (#{coalesced_columns}))")
         end
       end
+
+      context 'with one column specifying the table' do
+        let(:options) { { only: :"#{Model.table_name}.name" } }
+
+        it 'only searches against the select column' do
+          coalesced_column = "coalesce(#{Model.quoted_table_name}.\"name\"::text, '')"
+          expect(feature.conditions.to_sql).to eq("('#{query}' % (#{coalesced_column}))")
+        end
+      end
     end
   end
 

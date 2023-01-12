@@ -5,11 +5,10 @@ require 'digest'
 module PgSearch
   class Configuration
     class ForeignColumn < Column
-      attr_reader :weight
-
       def initialize(column_name, weight, model, association)
         super(column_name, weight, model)
         @association = association
+        @table = association.table_name
       end
 
       def alias

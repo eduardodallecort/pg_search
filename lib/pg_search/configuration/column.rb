@@ -5,7 +5,7 @@ require 'digest'
 module PgSearch
   class Configuration
     class Column
-      attr_reader :weight, :name
+      attr_reader :weight, :name, :table
 
       def initialize(column_name, weight, model)
         @name = column_name.to_s
@@ -13,6 +13,7 @@ module PgSearch
         @weight = weight
         @model = model
         @connection = model.connection
+        @table = model.table_name
       end
 
       def full_name
